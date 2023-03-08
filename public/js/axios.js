@@ -1,1 +1,1 @@
-axios.defaults.baseURL = "http://localhost:5000/api/v1";
+axios.defaults.baseURL = "https://lets-chat-lxxe.onrender.com/api/v1";

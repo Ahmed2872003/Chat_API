@@ -1,6 +1,6 @@
 import { friendElements } from "../components/Friend.js";
 
-const socket = io("http://localhost:5000");
+const socket = io("https://lets-chat-lxxe.onrender.com");
 
 const id = JSON.parse(localStorage.getItem("user")).id;
 
