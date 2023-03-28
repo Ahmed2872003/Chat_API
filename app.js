@@ -37,6 +37,7 @@ const userRouter = require("./routes/user");
 const roomsRouter = require("./routes/room");
 
 const msgRouter = require("./routes/message");
+const room = require("./models/room");
 
 // Middlewares
 
@@ -76,7 +77,17 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", userDisconnect);
 
-  socket.on("startChat", (msg) => io.sockets.emit("pushMsg", msg));
+  socket.on("startChat", (msg) => socket.broadcast.emit("pushMsg", msg));
+
+  socket.on("read", (roomID, userID) =>
+    socket.broadcast.emit("room-active", roomID, userID)
+  );
+
+  socket.on("active", (roomID) => socket.broadcast.emit("mark-read", roomID));
+
+  socket.on("mark-latest", (roomID) =>
+    socket.broadcast.emit("start-mark-latest", roomID)
+  );
 });
 
 const start = async () => {

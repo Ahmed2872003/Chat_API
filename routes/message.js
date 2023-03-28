@@ -1,9 +1,16 @@
 const router = require("express").Router();
 
-const { createMsg, getAllMessages } = require("../controllers/message");
+const {
+  createMsg,
+  getAllMessages,
+  updateMsgs,
+  updateMsg,
+} = require("../controllers/message");
 
-router.post("/", createMsg);
+router.route("/").post(createMsg);
 
-router.route("/private/:roomID").get(getAllMessages);
+router.route("/private/:roomID").get(getAllMessages).patch(updateMsgs);
+
+router.route("/:_id").patch(updateMsg);
 
 module.exports = router;

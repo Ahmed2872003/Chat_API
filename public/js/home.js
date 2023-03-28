@@ -6,6 +6,8 @@ import timeFormatter from "./timeFormatter.js";
 
 import n from "./profile.js";
 
+// import socket from "../js/socket.js";
+
 const profileBtn = document.getElementById("main-profile-btn");
 
 const profile = document.getElementById("profile");
@@ -40,9 +42,11 @@ const userCreationTime = document.getElementById("time-creation");
 // profile
 const welcomePage = document.getElementById("welcome");
 
+const bodyLoading = document.querySelector("body > .loading");
 const loading = document.querySelector("#usersCon .loading");
 
 const authorization = `Bearer ${localStorage.getItem("token")}`;
+
 const userDetail = JSON.parse(localStorage.getItem("user"));
 
 // get user details
@@ -54,7 +58,7 @@ userCreationTime.innerText = `${timeCreation.date} ${timeCreation.time}`;
 // Get user's friends from DB
 (async () => {
   try {
-    loading.classList.remove("hidden");
+    bodyLoading.classList.remove("hidden");
     const { data } = await axios.get(axios.defaults.baseURL + "/room/private", {
       headers: { authorization },
     });
@@ -63,19 +67,19 @@ userCreationTime.innerText = `${timeCreation.date} ${timeCreation.time}`;
       friend: { name, _id: id, active },
       roomID,
     } of data.friends) {
-      usersCon.appendChild(friend(name, id, roomID, active));
+      usersCon.appendChild(await friend(name, id, roomID, active));
     }
-    loading.classList.add("hidden");
+
+    bodyLoading.classList.add("hidden");
 
     if (!data.friends.length)
       usersCon.append(
         "You have no friends, try adding new friends from plus sign above."
       );
   } catch (err) {
-    console.log(err.response.data);
+    console.log(err);
   }
 })();
-import socket from "../js/socket.js";
 
 // Showing user profile
 
@@ -101,6 +105,7 @@ searchByNameForm.onsubmit = function (e) {
       const username = user.children[0].children[1].innerText.toLowerCase();
       if (username.startsWith(searchByNameInp.value.toLowerCase())) {
         filterRes.appendChild(user);
+        i--;
       }
     }
     if (!filterRes.children.length) filterRes.innerText = "No results found";
@@ -138,7 +143,7 @@ addUserBtn.onclick = function () {
 // searching By id
 
 function removeAlert() {
-  setTimeout(() => (alert.innerText = ""), 2000);
+  setTimeout(() => (alert.innerText = ""), 3500);
 }
 
 addUserForm.onsubmit = async function (e) {
@@ -158,7 +163,7 @@ addUserForm.onsubmit = async function (e) {
     removeAlert();
     return;
   }
-  // Add frind with id
+  // Add frind By id
   try {
     loading.classList.remove("hidden");
 
@@ -180,11 +185,11 @@ addUserForm.onsubmit = async function (e) {
         headers: { authorization },
       }
     );
-    usersCon.appendChild(friend(name, id, roomID, active));
+    usersCon.appendChild(await friend(name, id, roomID, active));
     loading.classList.add("hidden");
   } catch (err) {
     loading.classList.add("hidden");
-    alert.innerText = err.response.data.msg;
+    alert.innerText = err;
     removeAlert();
   }
 };

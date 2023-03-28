@@ -13,7 +13,7 @@ const authentication = async (req, res, next) => {
   if (!user)
     throw new customError("That email doesn't exist", StatusCodes.UNAUTHORIZED);
 
-  const isPasswordTrue = user.compare(userPass);
+  const isPasswordTrue = await user.compare(userPass);
 
   if (!isPasswordTrue)
     throw new customError("Wrong password", StatusCodes.UNAUTHORIZED);

@@ -7,11 +7,11 @@ export default (currDate) => {
 
   const time = currDate[1].split(":");
 
-  let ampm = +time[0] >= 12 ? "PM" : "AM";
+  let ampm = +time[0] + 2 >= 12 ? "PM" : "AM";
 
-  let hours = +time[0] % 12;
+  let hours = (+time[0] + 2) % 12;
 
   hours = !hours ? 12 : hours;
 
-  return { date: currDate[0], time: `${hours + 2}:${time[1]} ${ampm}` };
+  return { date: currDate[0], time: `${hours}:${time[1]} ${ampm}` };
 };

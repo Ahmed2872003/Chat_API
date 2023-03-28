@@ -1,21 +1,22 @@
+import socket from "../js/socket.js";
 import chattingPage from "./Chat-page.js";
 
 const chattingPart = document.getElementById("chatting-part");
 
 const usersCon = document.getElementById("users");
 
-const loading = document.querySelector("#chatting-part .loading");
-
 const friendElements = new Map(/*ID => element*/);
 
-const friend = (name, ID, roomID, status = false, n_of_msg = 0) => {
+const authorization = `Bearer ${localStorage.getItem("token")}`;
+
+const friend = async (name, ID, roomID, status = false) => {
   const userDiv = document.createElement("div");
   const div = document.createElement("div");
   const statusDiv = document.createElement("div");
   const statusSign = document.createElement("span");
   const userImg = document.createElement("img");
   const username = document.createElement("h2");
-  const nOfSentMsg = document.createElement("span");
+  const nOfSentMsgCon = document.createElement("span");
 
   // <i class="fa-solid fa-circle-exclamation"></i>
   userDiv.classList.add("user");
@@ -37,42 +38,48 @@ const friend = (name, ID, roomID, status = false, n_of_msg = 0) => {
   username.classList.add("name");
   username.append(name);
 
-  nOfSentMsg.classList.add("show-num-msg");
-  if (!n_of_msg) {
-    nOfSentMsg.classList.add("hidden");
-  }
-  nOfSentMsg.innerText = n_of_msg;
+  nOfSentMsgCon.classList.add("show-num-msg");
+  nOfSentMsgCon.innerText = 0;
 
   div.appendChild(statusDiv);
   div.appendChild(username);
 
   userDiv.appendChild(div);
-  userDiv.appendChild(nOfSentMsg);
+  userDiv.appendChild(nOfSentMsgCon);
 
-  // Setting onclick event for all users
+  // getting chat realtive to that friend
+  const chatPage = await chattingPage(name, ID, roomID, userDiv);
+  // Showing chat realtive to that friend
 
   userDiv.onclick = async function (event) {
-    const username = this.children[0].children[1].innerText;
-    // remove previous chat
     // apply chat page for each friend clicked
-
-    if (chattingPart.children[1]) chattingPart.children[1].remove();
-
-    loading.classList.remove("hidden");
 
     chattingPart.style.zIndex = "1";
 
-    const chatPage = await chattingPage(username, ID, roomID, userDiv);
-
+    // remove previous chat
     if (chattingPart.children[1]) chattingPart.children[1].remove();
 
     chattingPart.appendChild(chatPage);
 
     chatPage.children[1].scrollTop = chatPage.children[1].scrollHeight;
 
-    loading.classList.add("hidden");
+    // change messages to read state (in database)
+    axios.patch(
+      axios.defaults.baseURL + `/message/private/${roomID}`,
+      { read: true },
+      {
+        headers: {
+          authorization,
+        },
+      }
+    );
+    // change messages to read state (Realtime)
+    socket.emit("mark-latest", roomID);
 
     swithcer(userDiv);
+
+    nOfSentMsgCon.classList.add("hidden");
+    nOfSentMsgCon.innerText = 0;
   };
 
   friendElements.set(ID, userDiv);

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const jwt = require("jsonwebtoken");
 
-const Cryptr = require("cryptr");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -35,14 +35,14 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.pre("save", function () {
-  const cryptr = new Cryptr(process.env.CRYPTER_SECRET);
-  this.password = cryptr.encrypt(this.password);
+userSchema.pre("save", async function () {
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
 });
 
-userSchema.methods.compare = function (userPass) {
-  const cryptr = new Cryptr(process.env.CRYPTER_SECRET);
-  return cryptr.decrypt(this.password) === userPass ? true : false;
+userSchema.methods.compare = async function (userPass) {
+  const isMatch = await bcrypt.compare(userPass, this.password);
+  return isMatch;
 };
 
 userSchema.methods.createJWT = function () {
