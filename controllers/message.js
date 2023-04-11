@@ -17,7 +17,7 @@ const getAllMessages = async (req, res) => {
 
   const msgs = await Msg.find({ roomID });
 
-  const data = await (() =>
+  const data = await (async () =>
     msgs.map((msg) => ({
       senderID: msg.senderID,
       roomID: msg.roomID,
