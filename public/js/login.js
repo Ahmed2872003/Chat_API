@@ -51,9 +51,25 @@ typeSwitchBtn.onclick = () => {
 };
 
 // auto login when user logged in before
-window.addEventListener("load", () => {
-  if (localStorage.getItem("token") && localStorage.getItem("user")) {
-    window.open("../pages/home.html", "_self");
+window.addEventListener("load", async () => {
+  const token = localStorage.getItem("token");
+
+  if (token && localStorage.getItem("user")) {
+    try {
+      await axios.post(
+        axios.defaults.baseURL + "/auth",
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      window.open("../pages/home.html", "_self");
+    } catch (err) {
+      console.log(err);
+    }
   }
 });
 

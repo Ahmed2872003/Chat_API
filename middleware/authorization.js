@@ -30,6 +30,11 @@ const authorization = async (req, res, next) => {
     );
   }
 
+  if (req.url === "/") {
+    res.sendStatus(200);
+    return;
+  }
+
   next();
 };
 
