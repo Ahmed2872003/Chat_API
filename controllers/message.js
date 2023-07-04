@@ -17,15 +17,14 @@ const getAllMessages = async (req, res) => {
 
   const msgs = await Msg.find({ roomID });
 
-  const data = await (async () =>
-    msgs.map((msg) => ({
-      senderID: msg.senderID,
-      roomID: msg.roomID,
-      read: msg.read,
-      content: msg.decryptedText,
-      createdAt: msg.createdAt,
-      _id: msg._id,
-    })))();
+  const data = msgs.map((msg) => ({
+    senderID: msg.senderID,
+    roomID: msg.roomID,
+    read: msg.read,
+    content: msg.decryptedText,
+    createdAt: msg.createdAt,
+    _id: msg._id,
+  }));
 
   res.status(200).json({ data: { messages: data }, length: msgs.length });
 };
