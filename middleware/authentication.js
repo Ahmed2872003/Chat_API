@@ -6,7 +6,10 @@ const authentication = async (req, res, next) => {
   const { email: userEmail, password: userPass } = req.body;
 
   if (!userEmail || !userPass)
-    throw new customError("Must provide both email and password", 404);
+    throw new customError(
+      "Must provide both email and password",
+      StatusCodes.BAD_REQUEST
+    );
 
   const user = (await User.find({ email: userEmail }))[0];
 
