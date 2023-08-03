@@ -25,7 +25,7 @@ const getUserByID = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const user = await User.findByIdAndUpdate(req.user.userID, req.body, {
+  const user = await User.findOneAndUpdate({ _id: req.user.userID }, req.body, {
     new: true,
     runValidators: true,
   });

@@ -35,9 +35,23 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.pre("save", async function () {
+async function hashPass(pass) {
   const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  return await bcrypt.hash(pass, salt);
+}
+
+userSchema.pre("save", async function () {
+  this.password = await hashPass(this.password);
+});
+
+userSchema.post("findOneAndUpdate", async function (doc, next) {
+  const updated = this.getUpdate();
+  if (updated["$set"] && updated["$set"].password) {
+    const { password } = doc;
+    doc.password = password;
+    await doc.save(); // will call .pre("save") middleware
+  }
+  next();
 });
 
 userSchema.methods.compare = async function (userPass) {
