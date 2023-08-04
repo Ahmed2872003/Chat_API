@@ -40,19 +40,8 @@ async function hashPass(pass) {
   return await bcrypt.hash(pass, salt);
 }
 
-userSchema.pre("save", async function () {
-  if (this.isModified("password"))
-    this.password = await hashPass(this.password);
-});
-
-userSchema.pre("findOneAndUpdate", async function (next) {
-  const { password } = this.getUpdate();
-
-  if (password) {
-    const user = await this.model.findById(this.getQuery());
-    user.password = password;
-    await user.save(); // Will call pre("save")
-  }
+userSchema.pre("save", async function (next) {
+  this.password = await hashPass(this.password);
   next();
 });
 

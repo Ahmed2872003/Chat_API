@@ -33,6 +33,8 @@ const updateUser = async (req, res) => {
   if (!user)
     throw new CustomAPIError(`No user with that id: ${req.user.userID}`);
 
+  if (req.body.password) user.save();
+
   res.status(200).json({ name: user.name });
 };
 
