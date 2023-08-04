@@ -41,15 +41,17 @@ async function hashPass(pass) {
 }
 
 userSchema.pre("save", async function () {
-  this.password = await hashPass(this.password);
+  if (this.isModified("password"))
+    this.password = await hashPass(this.password);
 });
 
-userSchema.post("findOneAndUpdate", async function (doc, next) {
-  const updated = this.getUpdate();
-  if (updated["$set"] && updated["$set"].password) {
-    const { password } = doc;
-    doc.password = password;
-    await doc.save(); // will call .pre("save") middleware
+userSchema.pre("findOneAndUpdate", async function (next) {
+  const { password } = this.getUpdate();
+
+  if (password) {
+    const user = await this.model.findById(this.getQuery());
+    user.password = password;
+    await user.save(); // Will call pre("save")
   }
   next();
 });
