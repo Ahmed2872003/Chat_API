@@ -9,7 +9,7 @@ const {
   updateRoomMsgs,
 } = require("../controllers/room");
 
-router.route("/private").post(createPrivateRoom).get(getAllRooms);
+router.route("/").post(createPrivateRoom).get(getAllRooms);
 
 router.route("/:id").get(getRoomMessages).patch(updateRoomMsgs);
 

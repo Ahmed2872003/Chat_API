@@ -55,11 +55,11 @@ userIDCon.innerText = userDetail.id;
 const timeCreation = timeFormatter(userDetail.createdAt);
 userCreationTime.innerText = `${timeCreation.date} ${timeCreation.time}`;
 
-// Get user's friends from DB
+// Get user's rooms from DB
 (async () => {
   try {
     bodyLoading.classList.remove("hidden");
-    const { data } = await axios.get(axios.defaults.baseURL + "/room/private", {
+    const { data } = await axios.get(axios.defaults.baseURL + "/room", {
       headers: { authorization },
     });
 
@@ -179,7 +179,7 @@ addUserForm.onsubmit = async function (e) {
     const {
       data: { roomID },
     } = await axios.post(
-      axios.defaults.baseURL + "/room/private",
+      axios.defaults.baseURL + "/room",
       { friendID: id },
       {
         headers: { authorization },
