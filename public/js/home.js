@@ -72,7 +72,7 @@ userCreationTime.innerText = `${timeCreation.date} ${timeCreation.time}`;
 
     bodyLoading.classList.add("hidden");
 
-    if (!data.friends.length)
+    if (!data.rooms.length)
       usersCon.append(
         "You have no friends, try adding new friends from plus sign above."
       );
