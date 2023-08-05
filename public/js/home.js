@@ -66,7 +66,7 @@ userCreationTime.innerText = `${timeCreation.date} ${timeCreation.time}`;
     for (const {
       friend: { name, _id: id, active },
       roomID,
-    } of data.friends) {
+    } of data.rooms) {
       usersCon.appendChild(await friend(name, id, roomID, active));
     }
 

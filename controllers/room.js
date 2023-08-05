@@ -36,7 +36,7 @@ const createPrivateRoom = async (req, res) => {
 };
 
 const getAllRooms = async (req, res) => {
-  const friends = await Friend.aggregate([
+  const rooms = await Friend.aggregate([
     {
       $match: { userID: mongoose.Types.ObjectId(req.user.userID) },
     },
@@ -62,7 +62,7 @@ const getAllRooms = async (req, res) => {
     },
   ]);
 
-  res.status(200).json({ friends });
+  res.status(200).json({ rooms });
 };
 
 const getRoomMessages = async (req, res) => {
