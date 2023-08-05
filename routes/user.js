@@ -6,6 +6,6 @@ router.get("/", getUser);
 
 router.get("/:id", getUserByID);
 
-router.route("/edit").patch(updateUser);
+router.route("/").patch(updateUser);
 
 module.exports = router;

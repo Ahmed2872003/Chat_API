@@ -39,7 +39,7 @@ editForm.onsubmit = async function (e) {
   e.preventDefault();
   try {
     await axios.patch(
-      axios.defaults.baseURL + "/user/edit",
+      axios.defaults.baseURL + "/user",
       { name: editNameInput.value },
       { headers: { authorization } }
     );
