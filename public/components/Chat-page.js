@@ -67,7 +67,7 @@ const chatPage = async (friendName, friendID, roomID, friendElement) => {
         data: { messages },
         length,
       },
-    } = await axios.get(axios.defaults.baseURL + `/message/private/${roomID}`, {
+    } = await axios.get(axios.defaults.baseURL + `/room/${roomID}`, {
       headers: { authorization },
     });
 

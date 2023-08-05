@@ -65,7 +65,7 @@ const friend = async (name, ID, roomID, status = false) => {
 
     // change messages to read state (in database)
     axios.patch(
-      axios.defaults.baseURL + `/message/private/${roomID}`,
+      axios.defaults.baseURL + `/room/${roomID}`,
       { read: true },
       {
         headers: {

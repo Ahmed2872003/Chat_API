@@ -35,7 +35,7 @@ const createPrivateRoom = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ roomID: room._id });
 };
 
-const getAllFriends = async (req, res) => {
+const getAllRooms = async (req, res) => {
   const friends = await Friend.aggregate([
     {
       $match: { userID: mongoose.Types.ObjectId(req.user.userID) },
@@ -65,7 +65,34 @@ const getAllFriends = async (req, res) => {
   res.status(200).json({ friends });
 };
 
+const getRoomMessages = async (req, res) => {
+  const { id } = req.params;
+
+  const msgs = await Message.find({ roomID: id });
+
+  const data = msgs.map((msg) => ({
+    senderID: msg.senderID,
+    roomID: msg.roomID,
+    read: msg.read,
+    content: msg.decryptedText,
+    createdAt: msg.createdAt,
+    _id: msg._id,
+  }));
+
+  res.status(200).json({ data: { messages: data }, length: msgs.length });
+};
+
+const updateRoomMsgs = async (req, res) => {
+  await Message.updateMany(
+    { roomID: req.params.id, senderID: { $ne: req.user.userID } },
+    req.body
+  );
+  res.sendStatus(200);
+};
+
 module.exports = {
   createPrivateRoom,
-  getAllFriends,
+  getRoomMessages,
+  updateRoomMsgs,
+  getAllRooms,
 };
