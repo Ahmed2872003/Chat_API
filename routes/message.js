@@ -11,6 +11,6 @@ router.route("/").post(createMsg);
 
 router.route("/private/:roomID").get(getAllMessages).patch(updateMsgs);
 
-router.route("/:_id").patch(updateMsg);
+router.route("/:id").patch(updateMsg);
 
 module.exports = router;

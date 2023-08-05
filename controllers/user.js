@@ -1,6 +1,7 @@
 const User = require("../models/user");
 
 const CustomAPIError = require("../errors/customError");
+const { StatusCodes } = require("http-status-codes");
 
 const getUser = async (req, res) => {
   const user = await User.findById(req.user.userID);
@@ -31,7 +32,10 @@ const updateUser = async (req, res) => {
   });
 
   if (!user)
-    throw new CustomAPIError(`No user with that id: ${req.user.userID}`);
+    throw new CustomAPIError(
+      `No user with that id: ${req.user.userID}`,
+      StatusCodes.NOT_FOUND
+    );
 
   if (req.body.password) user.save();
 

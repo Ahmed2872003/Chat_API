@@ -38,7 +38,7 @@ const updateMsgs = async (req, res) => {
 };
 
 const updateMsg = async (req, res) => {
-  await Msg.findByIdAndUpdate(req.params._id, req.body);
+  await Msg.findByIdAndUpdate(req.params.id, req.body);
   res.sendStatus(200);
 };
 (async () => {})();
