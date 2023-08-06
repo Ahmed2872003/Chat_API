@@ -17,10 +17,15 @@ const createMsg = async (req, res) => {
 };
 
 const updateMsg = async (req, res) => {
-  await Message.findByIdAndUpdate(req.params.id, req.body);
+  const msg = await Message.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (req.body.content) await msg.save();
+
   res.sendStatus(200);
 };
-(async () => {})();
 
 module.exports = {
   createMsg,

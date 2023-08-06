@@ -71,12 +71,8 @@ const getRoomMessages = async (req, res) => {
   const msgs = await Message.find({ roomID: id });
 
   const data = msgs.map((msg) => ({
-    senderID: msg.senderID,
-    roomID: msg.roomID,
-    read: msg.read,
+    ...msg.toObject(),
     content: msg.decryptedText,
-    createdAt: msg.createdAt,
-    _id: msg._id,
   }));
 
   res.status(200).json({ data: { messages: data }, length: msgs.length });
