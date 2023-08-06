@@ -1,0 +1,584 @@
+openapi: 3.0.0
+info:
+  title: Chat_App
+  contact: {}
+  version: "1.0"
+servers:
+  - url: https://lets-chat-lxxe.onrender.com/api/v1
+    variables: {}
+paths:
+  /auth/signup:
+    post:
+      tags:
+        - Auth
+      summary: Signup
+      operationId: signup
+      parameters: []
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/User"
+                - example:
+                    name: ahmed
+                    email: ahmed@gmail.com
+                    password: secret
+            example:
+              name: ahmed
+              email: ahmed@gmail.com
+              password: secret
+        required: true
+      responses:
+        "201":
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      id:
+                        type: string
+                      createdAt:
+                        type: string
+
+          headers: {}
+        "409":
+          description: "Conflict. Email already exists"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                example:
+                  msg: "value in email field is used"
+          headers: {}
+        "400":
+          description: "BadRequest. name must be from 1 - 20 char and pass must be greater than or equal to 6 char"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                example:
+                  msg: "user validation failed: email: Provide a valid email"
+          headers: {}
+
+      deprecated: false
+      security: []
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login
+      operationId: login
+      parameters: []
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+            example:
+              email: mostafa@gmail.com
+              password: secret
+        required: true
+      responses:
+        "200":
+          description: "signed in successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      id:
+                        type: string
+                      createdAt:
+                        type: string
+          headers: {}
+
+        "400":
+          description: "BadRequest. Email or password is missing"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                example:
+                  msg: "Must provide both email and password"
+          headers: {}
+
+        "401":
+          description: "Unauthorized. Email or password is wrong"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                example:
+                  msg: "That email doesn't exist"
+          headers: {}
+
+      deprecated: false
+      security: []
+  /user:
+    get:
+      tags:
+        - User
+      summary: Get_User
+      operationId: get_user
+      parameters: []
+      responses:
+        "200":
+          description: "getting user data"
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  createdAt:
+                    type: string
+                example:
+                  id: "6424167751b9d52886a6f973"
+                  name: "Mostafa"
+                  createdAt: "2023-03-29T10:27:29.068Z"
+      deprecated: false
+      security:
+        - bearer: []
+
+    patch:
+      tags:
+        - User
+      summary: Update_User
+      operationId: update_user
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                name:
+                  type: string
+              example:
+                password: "secret1"
+                name: "Adam"
+      responses:
+        "200":
+          description: "User data updated"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                example:
+                  name: "Ahmed"
+
+          headers: {}
+        "400":
+          description: "password must be greater than or equal 6 characters, name between 1 - 20 characters"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                example:
+                  msg: "Validation failed: name: name must be between 1 to 20 characters"
+
+      deprecated: false
+      security:
+        - bearer: []
+  /room:
+    post:
+      tags:
+        - Room
+      summary: Create_Private_Room
+      operationId: create_private_room
+      parameters: []
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                friendID:
+                  type: string
+            example:
+              friendID: 63fffa898444452c13866471
+        required: true
+      responses:
+        "201":
+          description: "Room created successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  roomID:
+                    type: string
+          headers: {}
+        "409":
+          description: "Conflict. That room was created before"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                example:
+                  msg: "values in userID,friendID fields are used"
+        "404":
+          description: "No user found with that id"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                example:
+                  msg: "No user found with that id: 64cd461f209e313b716b1abc"
+      deprecated: false
+      security:
+        - bearer: []
+
+    get:
+      tags:
+        - Room
+      summary: Get_All_Rooms
+      operationId: Get_All_User_Rooms
+      parameters: []
+      responses:
+        "200":
+          description: "get firends with their rooms"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  firends:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        roomID:
+                          type: string
+                        friend:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                            active:
+                              type: boolean
+          headers: {}
+      deprecated: false
+      security:
+        - bearer: []
+  /room/{roomID}:
+    get:
+      tags:
+        - Room
+      summary: Get_All_Messages_From_Room
+      parameters:
+        - in: path
+          name: roomID
+          schema:
+            type: string
+          required: true
+          description: ID of the room to get messages
+      operationId: Get_All_Messages_From_Room
+      responses:
+        "200":
+          description: "Getting room messages"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      messages:
+                        type: array
+                        items:
+                          type: object
+                          allOf:
+                            - $ref: "#/components/schemas/Message"
+
+          headers: {}
+      deprecated: false
+      security:
+        - bearer: []
+
+    patch:
+      tags:
+        - Room
+      summary: Update_All_Messages_In_A_Room (Execluding user message)
+      parameters:
+        - in: path
+          name: roomID
+          schema:
+            type: string
+          required: true
+          description: ID of the room
+      operationId: Update_All_Messages_From_Room
+
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                read:
+                  type: boolean
+              example:
+                read: true
+
+      responses:
+        "200":
+          description: "Messages were updated successfully"
+      security:
+        - bearer: []
+  /user/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The user ID
+    get:
+      tags:
+        - User
+      summary: Get_User_By_ID
+      operationId: get_user_byID
+      parameters: []
+      responses:
+        "200":
+          description: "Found user"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  active:
+                    type: boolean
+          headers: {}
+        "404":
+          description: "No user found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                example:
+                  msg: "No user found with id: 64cd3235d086fd0b76a9a4a2"
+
+      deprecated: false
+      security:
+        - bearer: []
+
+  /message:
+    post:
+      tags:
+        - Message
+      summary: Create_Message
+      operationId: Create_Message
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomID:
+                  type: string
+                content:
+                  type: string
+        required: true
+      responses:
+        "201":
+          description: "Message created successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+      security:
+        - bearer: []
+  /message/{id}:
+    patch:
+      tags:
+        - Message
+      summary: Update_Message
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID of the message
+      operationId: Update_Message
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: "Message updated successfully"
+components:
+  schemas:
+    User:
+      title: User
+      required:
+        - name
+        - email
+        - password
+        - _id
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        active:
+          type: boolean
+          default: false
+        createdAt:
+          type: string
+          default: Date.now()
+        updatedAt:
+          type: string
+          default: Date.now()
+      example:
+        name: ahmed
+        email: ahmed@gmail.com
+        password: secret
+
+    Message:
+      title: Message
+      required:
+        - content
+        - senderID
+        - roomID
+        - _id
+      type: object
+      properties:
+        _id:
+          type: string
+        content:
+          type: string
+        read:
+          type: boolean
+        senderID:
+          type: string
+        roomID:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        deleted:
+          type: boolean
+
+    Room:
+      title: Room
+      required:
+        - _id
+      type: object
+      properties:
+        _id:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+    Friend:
+      title: Friend
+      required:
+        - userID
+        - friendID
+        - roomID
+      type: object
+      properties:
+        userID:
+          type: string
+        friendID:
+          type: string
+        roomID:
+          type: string
+
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+security: []
+tags:
+  - name: Auth
+    description: ""
+  - name: User
+    description: ""
+  - name: Room
+    description: ""
+  - name: Message
+    description: ""

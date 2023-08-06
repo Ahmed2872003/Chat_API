@@ -31,6 +31,11 @@ const helmet = require("helmet");
 const cors = require("cors");
 const xss = require("xss-clean");
 
+// Swagger
+const swaggerUI = require("swagger-ui-express");
+const YAML = require("yamljs");
+const swaggerDocument = YAML.load("./swagger.yaml");
+
 // Routers
 const authRouter = require("./routes/auth");
 
@@ -58,9 +63,11 @@ app.use(cors());
 
 app.use(xss());
 
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+
 app.use("/api/v1/auth", authRouter);
 
-app.use(authorization);
+app.use("/api/v1", authorization);
 
 app.use("/api/v1/user", userRouter);
 
