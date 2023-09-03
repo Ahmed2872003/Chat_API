@@ -1,6 +1,6 @@
 import { friendElements } from "../components/Friend.js";
 
-const socket = io("https://lets-chat-lxxe.onrender.com");
+const socket = io(axios.defaults.publicUrl);
 
 const id = JSON.parse(localStorage.getItem("user")).id;
 

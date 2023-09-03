@@ -12,9 +12,11 @@ const port = process.env.PORT || 5000;
 
 const io = require("socket.io")(server, {
   cors: {
-    origin: "https://lets-chat-lxxe.onrender.com/",
+    origin: process.env.PUBLIC_URL,
   },
 });
+
+const host = require("os");
 
 const connectDB = require("./db/connectDB");
 

@@ -1,1 +1,2 @@
-axios.defaults.baseURL = "https://lets-chat-lxxe.onrender.com/api/v1";
+axios.defaults.publicUrl = "https://lets-chat-lxxe.onrender.com";
+axios.defaults.baseURL = `${axios.defaults.publicUrl}/api/v1`;
