@@ -26,4 +26,37 @@
 * **Add friend by his id**
 
 ## Setup
-1. **Clone the repository:**
+1. **Clone the repository:** <br />
+    ```
+    git clone https://github.com/Ahmed2872003/Chat_API.git
+    ```
+2. **Navigate to the project directory:** <br />
+    ```
+    cd Chat_API
+    ```
+3. **Install the dependencies:** <br />
+    ```
+    npm install
+    ```
+4. **Create a .env file in the root directory of the project.**
+5. **Add the following environment variables to the .env file:** <br />
+    ```
+    PUBLIC_URL=http://localhost:5000
+    MONGO_URI=<your-mongodb-uri>
+    JWT_SECRET=<your-jwt-secret>
+    MESSAGE_KEY=<your-message-key>
+    MESSAGE_IV=<your-message-iv>
+    ```
+    <p><strong>Note: </strong>MONGO_URI, JWT_SECRET, MESSAGE_KEY, and MESSAGE_IV are diffrent random keys for secure purposes. you can generate from <a href="https://acte.ltd/utils/randomkeygen">here</a> copy Encryption key 256.</p>
+6. **Go to public>js>axios.js** <br />
+    **replace** <br />
+     `axios.defaults.publicUrl = "https://lets-chat-lxxe.onrender.com";`<br />
+    **to** <br />
+      ```
+      axios.defaults.publicUrl = "http://localhost:5000";
+      ```
+7. **Start the application:** <br />
+     ```
+     npm start
+     ```
+   <p>This will start the application and it will be accessible at http://localhost:5000.</p>
