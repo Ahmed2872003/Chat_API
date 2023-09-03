@@ -26,3 +26,4 @@
 * **Add friend by his id**
 
 ## Setup
+1. **Clone the repository:**
