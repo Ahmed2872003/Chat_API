@@ -47,7 +47,7 @@
     MESSAGE_KEY=<your-message-key>
     MESSAGE_IV=<your-message-iv>
     ```
-    <p><strong>Note: </strong>JWT_SECRET, MESSAGE_KEY, and MESSAGE_IV are diffrent random keys for secure purposes. you can generate from <a href="https://acte.ltd/utils/randomkeygen">here</a> copy Encryption key 256.</p>
+    <p><strong>Note: </strong>JWT_SECRET, MESSAGE_KEY, and MESSAGE_IV are diffrent random keys for secure purposes. you can generate from <a href="https://acte.ltd/utils/randomkeygen">here</a> copy Encryption key 256 for all except MESSAGE_IV 128 wep.</p>
 6. **Go to public>js>axios.js** <br />
     **replace** <br />
      `axios.defaults.publicUrl = "https://lets-chat-lxxe.onrender.com";`<br />
