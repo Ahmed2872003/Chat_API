@@ -51,7 +51,7 @@ const userDetail = JSON.parse(localStorage.getItem("user"));
 
 // get user details
 usernameCon.innerText = userDetail.name;
-userIDCon.innerText = userDetail.id;
+userIDCon.innerText = userDetail._id;
 const timeCreation = timeFormatter(userDetail.createdAt);
 userCreationTime.innerText = `${timeCreation.date} ${timeCreation.time}`;
 
@@ -158,7 +158,7 @@ addUserForm.onsubmit = async function (e) {
       return;
     }
   }
-  if (idInput.value == userDetail.id) {
+  if (idInput.value == userDetail._id) {
     alert.innerText = "That id belongs to you";
     removeAlert();
     return;
@@ -168,7 +168,7 @@ addUserForm.onsubmit = async function (e) {
     loading.classList.remove("hidden");
 
     const {
-      data: { id, name, active },
+      data: { _id, name, active },
     } = await axios.get(axios.defaults.baseURL + `/user/${idInput.value}`, {
       headers: {
         authorization,
@@ -180,12 +180,12 @@ addUserForm.onsubmit = async function (e) {
       data: { roomID },
     } = await axios.post(
       axios.defaults.baseURL + "/room",
-      { friendID: id },
+      { friendID: _id },
       {
         headers: { authorization },
       }
     );
-    usersCon.appendChild(await friend(name, id, roomID, active));
+    usersCon.appendChild(await friend(name, _id, roomID, active));
     loading.classList.add("hidden");
   } catch (err) {
     loading.classList.add("hidden");

@@ -7,7 +7,7 @@ const customError = require("../errors/customError");
 const login = async (req, res) => {
   const token = req.user.createJWT();
 
-  const user = { ...req.user }._doc;
+  const user = req.user.toObject();
 
   delete user.email;
   delete user.password;
@@ -20,13 +20,19 @@ const login = async (req, res) => {
 };
 
 const signup = async (req, res) => {
-  const user = await User.create(req.body);
+  let user = await User.create(req.body);
 
   const token = user.createJWT();
 
+  user = user.toObject();
+
+  delete user.email;
+  delete user.password;
+  delete user.active;
+
   res.status(StatusCodes.CREATED).json({
     token,
-    user: { name: user.name, id: user._id, createdAt: user.createdAt },
+    user,
   });
 };
 

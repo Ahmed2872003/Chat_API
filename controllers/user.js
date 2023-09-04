@@ -4,12 +4,10 @@ const CustomAPIError = require("../errors/customError");
 const { StatusCodes } = require("http-status-codes");
 
 const getUser = async (req, res) => {
-  let user = await User.findById(req.user.userID);
+  const user = (await User.findById(req.user.userID)).toObject();
 
   if (!user)
     throw new CustomAPIError(`No user found with id: ${req.user.userID}`, 404);
-
-  user = { ...user }._doc;
 
   delete user.email;
   delete user.password;
@@ -19,12 +17,10 @@ const getUser = async (req, res) => {
 };
 
 const getUserByID = async (req, res) => {
-  let user = await User.findById(req.params.id);
+  const user = (await User.findById(req.params.id)).toObject();
 
   if (!user)
     throw new CustomAPIError(`No user found with id: ${req.params.id}`, 404);
-
-  user = { ...user }._doc;
 
   delete user.email;
   delete user.password;

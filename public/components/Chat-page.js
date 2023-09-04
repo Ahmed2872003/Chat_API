@@ -4,7 +4,7 @@ import { friend, friendElements } from "./Friend.js";
 
 const authorization = `Bearer ${localStorage.getItem("token")}`;
 
-const accountOwnerID = JSON.parse(localStorage.getItem("user")).id;
+const accountOwnerID = JSON.parse(localStorage.getItem("user"))._id;
 
 const chatPages = new Map();
 

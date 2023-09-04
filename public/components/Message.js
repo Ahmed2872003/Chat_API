@@ -1,6 +1,6 @@
 import timeFormatter from "../js/timeFormatter.js";
 
-const accountOwnerID = JSON.parse(localStorage.getItem("user")).id;
+const accountOwnerID = JSON.parse(localStorage.getItem("user"))._id;
 
 const message = (senderID, msg, time, id, read, unreadMessages = {}) => {
   const msgCon = document.createElement("div");

@@ -2,15 +2,15 @@ import { friendElements } from "../components/Friend.js";
 
 const socket = io(axios.defaults.publicUrl);
 
-const id = JSON.parse(localStorage.getItem("user")).id;
+const id = JSON.parse(localStorage.getItem("user"))._id;
 
 socket.off("connect").on("connect", () => socket.emit("user-active", id));
 
-socket.off("active-sign").on("active-sign", conectUser);
+socket.off("active-sign").on("active-sign", connectUser);
 
 socket.off("disconnected").on("disconnected", disconnectUser);
 
-function conectUser(id) {
+function connectUser(id) {
   const friendElement = friendElements.get(id);
 
   if (!friendElement) return;

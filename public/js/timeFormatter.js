@@ -1,17 +1,12 @@
 export default (currDate) => {
-  // 2023-02-25T23:19:06.092Z
-  currDate = currDate.split(".");
-  currDate.pop();
+  // 9/4/2023, 4:40:00 PM
+  currDate = new Date(currDate).toLocaleString("en-uS", {
+    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, // gets the timeZone identifier of your country
+  }); // converts the time to current country time
 
-  currDate = currDate[0].split("T");
+  let [date, time] = currDate.split(", ");
 
-  const time = currDate[1].split(":");
+  time = time.split(/:|\s/);
 
-  let ampm = +time[0] + 2 >= 12 ? "PM" : "AM";
-
-  let hours = (+time[0] + 2) % 12;
-
-  hours = !hours ? 12 : hours;
-
-  return { date: currDate[0], time: `${hours}:${time[1]} ${ampm}` };
+  return { date, time: `${time[0]}:${time[1]} ${time[3]}` };
 };
