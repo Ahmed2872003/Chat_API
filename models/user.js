@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  public_ID: {
+    type: String,
+    unique: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
@@ -41,7 +45,8 @@ async function hashPass(pass) {
 }
 
 userSchema.pre("save", async function (next) {
-  this.password = await hashPass(this.password);
+  if (this.getChanges()["$set"] && this.getChanges()["$set"]["password"])
+    this.password = await hashPass(this.password);
   next();
 });
 

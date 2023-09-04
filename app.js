@@ -16,8 +16,6 @@ const io = require("socket.io")(server, {
   },
 });
 
-const host = require("os");
-
 const connectDB = require("./db/connectDB");
 
 const notFound = require("./middleware/notFound");
@@ -26,6 +24,7 @@ const errorHandler = require("./middleware/errorHandler");
 
 const authorization = require("./middleware/authorization");
 
+// Listeners
 const { userConnect, userDisconnect } = require("./listeners/socketEvents");
 
 // Security packages
@@ -46,7 +45,7 @@ const userRouter = require("./routes/user");
 const roomsRouter = require("./routes/room");
 
 const msgRouter = require("./routes/message");
-const room = require("./models/room");
+const uploadRouter = require("./routes/upload");
 
 // Middlewares
 
@@ -72,6 +71,8 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1", authorization);
 
 app.use("/api/v1/user", userRouter);
+
+app.use("/api/v1/upload", uploadRouter);
 
 app.use("/api/v1/room", roomsRouter);
 

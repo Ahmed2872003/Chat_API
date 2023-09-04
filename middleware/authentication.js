@@ -11,7 +11,7 @@ const authentication = async (req, res, next) => {
       StatusCodes.BAD_REQUEST
     );
 
-  const user = (await User.find({ email: userEmail }))[0];
+  const user = await User.findOne({ email: userEmail });
 
   if (!user)
     throw new customError("That email doesn't exist", StatusCodes.UNAUTHORIZED);
